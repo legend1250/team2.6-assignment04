@@ -5,3 +5,4 @@ This simple "tennis like" game features two paddles and a ball, the goal is to d
 	+ Space: restart
 	+ W/S key: move paddle up/down
 	+ Up/Down key: move paddle up/down
+

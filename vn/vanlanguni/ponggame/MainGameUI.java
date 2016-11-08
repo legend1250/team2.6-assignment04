@@ -26,11 +26,13 @@ public class MainGameUI extends JFrame{
 		setTitle("Pong Game - K21T Ltd.");
 		pongPanel = new PongPanel();
 		getContentPane().add(pongPanel, BorderLayout.CENTER);
+		setLocation(800,150);
 		pack();
 	}
 
     public static void main(String[] args) {
        MainGameUI mainFrame = new MainGameUI();
        mainFrame.setVisible(true);
+       mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 }

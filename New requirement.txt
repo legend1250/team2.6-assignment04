@@ -1,0 +1,12 @@
+Pong Game - New Requirements
+----------------------------
+1. The game should have an attractive background.
+2. As a player, I can change the color of the ball or select a ball in a given list.
+3. As a player, I want a more colorful paddles.
+4. As a player, I want to be able to set my name and show it on screen
+5. As a player, I want to see a better welcome screen with nice background and beautiful game title.
+6. As a player, I want to hear sounds when the ball hit wall or paddles.
+7. As a player, I want to hear sounds when I start/win the game.
+8. The ball should bounce in different direction when it hits different position in the paddle.
+9. [*] When the game is playing, a random plus or minus sign will appear on screen every 5-15 seconds, if a ball hits this sign, last player hit the ball will have 25% increase or decrease in paddle size.
+10. [*] When the game is playing, a random >> or << sign will appear on screen every 20-30 seconds, if a ball hits this sign, it'll move faster or slower.

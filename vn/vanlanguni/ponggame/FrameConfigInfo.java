@@ -17,7 +17,6 @@ public class FrameConfigInfo extends JFrame{
 	final static int WIDTH = 400, HEIGHT = 400;
 	
 	BallPanel ballPanel = new BallPanel();
-	PongPanel pongPanel = new PongPanel();
 	
 	public FrameConfigInfo(){
 		setTitle("Config infomation");
@@ -30,16 +29,14 @@ public class FrameConfigInfo extends JFrame{
 		//add Panel
 		this.add(ballPanel);
 		ballPanel.setBounds(0,0,WIDTH,HEIGHT);
+		ballPanel.setVisible(false);
 		
 		ActionListener actionBall = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()== mniSetColorOfBall){
-					Color newColor = JColorChooser.showDialog(ballPanel, "Choose Ball Color",ballPanel.getBallColor());
-					ballPanel.setBallColor(newColor);
-					repaint();
-					pongPanel.setBallColor(newColor);
+					ballPanel.setVisible(true);
 				}
 			}
 		};

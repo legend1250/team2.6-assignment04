@@ -306,6 +306,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		}
 	}
 
+	FrameConfigInfo configFrame = new FrameConfigInfo();
 	
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -316,6 +317,12 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			wPressed = false;
 		} else if (e.getKeyCode() == KeyEvent.VK_S) {
 			sPressed = false;
+		}
+		
+		if(showTitleScreen){
+			if(e.getKeyCode() == KeyEvent.VK_C){
+				configFrame.setVisible(true);
+			}
 		}
 	}
 

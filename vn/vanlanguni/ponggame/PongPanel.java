@@ -55,7 +55,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private int diameter = 20;
 	private int ballDeltaX = -1;
 	private int ballDeltaY = 3;
-
+	private Color ballColor = Color.RED;
+	
 	/** Player 1's paddle: position and size */
 	private int playerOneX = 0;
 	private int playerOneY = 250;
@@ -213,6 +214,11 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 22));
 			g.drawString("Press 'P' to play.", 150, 150);
+			//Draw open Frame Config user
+			g.setColor(Color.YELLOW);
+			g.setFont(new Font(Font.SERIF, Font.BOLD, 16));
+			g.drawString("Press 'C' to config user", 320, 450);
+			
 		} else if (playing) {
 
 			/* Game is playing */
@@ -239,7 +245,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 																	// score
 
 			// draw the ball
-			g.setColor(Color.RED);
+			g.setColor(ballColor);
 			g.fillOval(ballX, ballY, diameter, diameter);
 
 			// draw the paddles
@@ -273,6 +279,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	public void keyTyped(KeyEvent e) {
 	}
 
+	
 	public void keyPressed(KeyEvent e) {
 		if (showTitleScreen) {
 			if (e.getKeyChar() == 'p') {
@@ -299,6 +306,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		}
 	}
 
+	
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			upPressed = false;
@@ -311,4 +319,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		}
 	}
 
+	public void setBallColor(Color newColor){
+		this.ballColor = newColor;
+	}
 }

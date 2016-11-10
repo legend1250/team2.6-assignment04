@@ -322,6 +322,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		if(showTitleScreen){
 			if(e.getKeyCode() == KeyEvent.VK_C){
 				configFrame.setVisible(true);
+				String s = configFrame.getConfig();
 			}
 		}
 	}

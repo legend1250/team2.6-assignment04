@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -17,7 +18,7 @@ public class FrameConfigInfo extends JFrame{
 	final static int WIDTH = 400, HEIGHT = 400;
 	
 	BallPanel ballPanel = new BallPanel();
-	
+	JButton btnSaveInfo = new JButton("Save");
 	public FrameConfigInfo(){
 		setTitle("Config infomation");
 		setPreferredSize(new Dimension(WIDTH,HEIGHT));
@@ -49,6 +50,10 @@ public class FrameConfigInfo extends JFrame{
 	JMenuBar mnbMenuBar;
 	JMenu mnuUser, mnuBall, mnuBackground;
 	JMenuItem mniSetNameOfUser, mniSetColorOfBall;
+	
+	public String getConfig(){
+		return ballPanel.getData();
+	}
 	
 	private void initMenuComponent(){
 		//init menuComponent

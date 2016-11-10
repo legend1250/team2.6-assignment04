@@ -62,6 +62,9 @@ public class BallPanel extends JPanel {
 	
 	}
 	
+	public String getData(){
+		return "5";
+	}
 	
 	public void setBallColor(Color newColor){
 		this.ballColor = newColor;

@@ -4,22 +4,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class FrameConfigInfo extends JFrame{
+public class DialogConfig extends JDialog{
 
 	
 	final static int WIDTH = 400, HEIGHT = 400;
 	
 	BallPanel ballPanel = new BallPanel();
 	JButton btnSaveInfo = new JButton("Save");
-	public FrameConfigInfo(){
+	
+	public DialogConfig(){
 		setTitle("Config infomation");
 		setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		setLocation(380,150);
@@ -27,10 +30,13 @@ public class FrameConfigInfo extends JFrame{
 		pack();
 		
 		initMenuComponent();
+		
 		//add Panel
 		this.add(ballPanel);
 		ballPanel.setBounds(0,0,WIDTH,HEIGHT);
 		ballPanel.setVisible(false);
+		
+		Ball ball = null;
 		
 		ActionListener actionBall = new ActionListener() {
 			
@@ -44,16 +50,12 @@ public class FrameConfigInfo extends JFrame{
 		
 		//add ActionListener to JMenuItem
 		mniSetColorOfBall.addActionListener(actionBall);
-		
+
 	}
 	
 	JMenuBar mnbMenuBar;
 	JMenu mnuUser, mnuBall, mnuBackground;
 	JMenuItem mniSetNameOfUser, mniSetColorOfBall;
-	
-	public String getConfig(){
-		return ballPanel.getData();
-	}
 	
 	private void initMenuComponent(){
 		//init menuComponent
@@ -75,5 +77,9 @@ public class FrameConfigInfo extends JFrame{
 		mnuBall.add(mniSetColorOfBall);
 		
 		
+	}
+	
+	public Color getBallColor(){
+		return ballPanel.getColor();
 	}
 }

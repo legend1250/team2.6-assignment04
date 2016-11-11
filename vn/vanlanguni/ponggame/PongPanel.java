@@ -249,6 +249,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			g.fillOval(ballX, ballY, diameter, diameter);
 
 			// draw the paddles
+			g.setColor(Color.RED);
 			g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
 			g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 		} else if (gameOver) {
@@ -306,8 +307,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		}
 	}
 
-	FrameConfigInfo configFrame = new FrameConfigInfo();
-	
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			upPressed = false;
@@ -319,12 +318,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			sPressed = false;
 		}
 		
-		if(showTitleScreen){
-			if(e.getKeyCode() == KeyEvent.VK_C){
-				configFrame.setVisible(true);
-				String s = configFrame.getConfig();
-			}
-		}
 	}
 
 	public void setBallColor(Color newColor){

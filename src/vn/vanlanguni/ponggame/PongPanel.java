@@ -407,6 +407,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				JDialogSettings settings = new JDialogSettings();
 				settings.setModal(true);
 				settings.setVisible(true);
+				setBallColor(settings.getBallColor());
 				settings.dispose();
 			}
 		}

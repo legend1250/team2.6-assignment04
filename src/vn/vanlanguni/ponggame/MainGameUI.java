@@ -23,22 +23,15 @@ public class MainGameUI extends JFrame {
 	
 	private PongPanel pongPanel;
 	
-	JDialog d;
-	DialogConfig d2;
-	
 	public MainGameUI(){
+		
 		setPreferredSize(new Dimension(_WIDTH, _HEIGHT));
 		setTitle("Pong Game - K21T Ltd.");
 		setLocation(800,150);
 		pongPanel = new PongPanel();
 		pack();
 		getContentPane().add(pongPanel, BorderLayout.CENTER);
-		
-		d2 = new DialogConfig();
-		d2.setModal(true);
-		d2.setVisible(true);
 
-		pongPanel.setBallColor(d2.getBallColor());
 	}	
 
     public static void main(String[] args) {

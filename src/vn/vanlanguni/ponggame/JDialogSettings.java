@@ -52,9 +52,6 @@ public class JDialogSettings extends JDialog{
 	JMenu mnuUser, mnuBall, mnuBackground;
 	JMenuItem mniSetNameOfUser, mniSetColorOfBall;
 	
-	public String getConfig(){
-		return ballPanel.getData();
-	}
 	
 	private void initMenuComponent(){
 		//init menuComponent

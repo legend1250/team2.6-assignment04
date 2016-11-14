@@ -34,6 +34,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -112,13 +113,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		try {
 			imagePlayGame = ImageIO.read(new File("images/btn_playgame.png"));
 			imageSettings = ImageIO.read(new File("images/setting.png"));
-			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
-		
-		
 		
 		// call step() 60 fps
 		Timer timer = new Timer(1000 / 60, this);
@@ -378,7 +375,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		System.out.println(String.format("%d %d",arg0.getX(), arg0.getY()));
+		//System.out.println(String.format("%d %d",arg0.getX(), arg0.getY()));
 		if(showTitleScreen){
 			//rectangle playgame
 			if(rect.contains(arg0.getX(), arg0.getY())){

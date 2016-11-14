@@ -55,22 +55,17 @@ public class BallPanel extends JPanel {
 	
 	
 	private void changeBallColor(){
-		Color newColor = JColorChooser.showDialog(this, "Choose Ball Color",getBallColor());
-		setBallColor(newColor);
-		
+		Color newColor = JColorChooser.showDialog(this, "Choose Ball Color",getColor());
+		setColor(newColor);
 		repaint();
-	
 	}
 	
-	public String getData(){
-		return "5";
-	}
 	
-	public void setBallColor(Color newColor){
+	public void setColor(Color newColor){
 		this.ballColor = newColor;
 	}
 
-	public Color getBallColor(){
+	public Color getColor(){
 		return ballColor;
 	}
 	

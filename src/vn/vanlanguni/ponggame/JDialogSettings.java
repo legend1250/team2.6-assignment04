@@ -7,19 +7,20 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class FrameConfigInfo extends JFrame{
+public class JDialogSettings extends JDialog{
 
 	
 	final static int WIDTH = 400, HEIGHT = 400;
 	
 	BallPanel ballPanel = new BallPanel();
 	JButton btnSaveInfo = new JButton("Save");
-	public FrameConfigInfo(){
+	public JDialogSettings(){
 		setTitle("Config infomation");
 		setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		setLocation(380,150);

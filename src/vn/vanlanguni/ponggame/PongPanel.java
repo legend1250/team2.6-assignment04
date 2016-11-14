@@ -24,16 +24,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import com.sun.javafx.geom.Rectangle;
 
 /**
  * 
  * @author Invisible Man
  *
  */
-public class PongPanel extends JPanel implements ActionListener, KeyListener {
+public class PongPanel extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
 	private static final long serialVersionUID = -1097341635155021546L;
 
 	private boolean showTitleScreen = true;
@@ -76,6 +86,15 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private int playerOneScore;
 	private int playerTwoScore;
 
+	
+	//
+	Rectangle rect;
+	int xRect =  130, yRect = 265, wRect = 200, hRect = 55;
+	Rectangle rectSettings;
+	int xSettings = 428, ySettings = yRect, wSettings = hRect, hSettings = hRect;
+	//ImageIcon imagePlayGame, imageSettings;
+	BufferedImage imagePlayGame, imageSettings;
+	
 	/** Construct a PongPanel. */
 	public PongPanel() {
 		setBackground(backgroundColor);
@@ -83,7 +102,24 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		// listen to key presses
 		setFocusable(true);
 		addKeyListener(this);
+		addMouseMotionListener(this);
+		addMouseListener(this);
+		
+		//new rect
+		rect = new Rectangle(xRect,yRect,wRect,hRect);
+		rectSettings = new Rectangle(xSettings,ySettings,wSettings,hSettings);
 
+		try {
+			imagePlayGame = ImageIO.read(new File("images/btn_playgame.png"));
+			imageSettings = ImageIO.read(new File("images/setting.png"));
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 		// call step() 60 fps
 		Timer timer = new Timer(1000 / 60, this);
 		timer.start();
@@ -199,6 +235,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	/** Paint the game screen. */
+	boolean hoverPlayGame;
+	boolean hoverSettings;
+	
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
@@ -212,12 +251,21 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
 			g.drawString("Pong Game", 130, 100);
 
-			g.setFont(new Font(Font.DIALOG, Font.BOLD, 22));
-			g.drawString("Press 'P' to play.", 150, 150);
-			//Draw open Frame Config user
-			g.setColor(Color.YELLOW);
-			g.setFont(new Font(Font.SERIF, Font.BOLD, 16));
-			g.drawString("Press 'C' to config user", 320, 450);
+			
+			if(hoverPlayGame){
+				g.setColor(Color.WHITE);
+				g.fillRect(xRect, yRect, wRect, hRect);
+				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect + hRect, 0, 0, 522, 186, null);
+			}
+			else{
+				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect + hRect, 0, 0, 522, 186, null);
+			}
+			if(hoverSettings){
+				g.drawImage(imageSettings, xSettings, ySettings, xSettings + wSettings, ySettings + hSettings, 0, 0, 300, 300, null);
+			}
+			else{
+				g.drawImage(imageSettings, xSettings, ySettings, xSettings + wSettings, ySettings + hSettings, 0, 0, 300, 300, null);
+			}
 			
 		} else if (playing) {
 
@@ -273,10 +321,14 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			g.setColor(Color.YELLOW);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 18));
 			g.drawString("Press 'Space' to restart the game", 150, 250);
+			
+			//reset score each player
+			playerOneScore = playerTwoScore = 0;
 		}
 	}
 
 	public void keyTyped(KeyEvent e) {
+	
 	}
 
 	
@@ -306,8 +358,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		}
 	}
 
-	FrameConfigInfo configFrame = new FrameConfigInfo();
-	
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			upPressed = false;
@@ -319,15 +369,82 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			sPressed = false;
 		}
 		
+	}
+	
+	public void setBallColor(Color newColor){
+		this.ballColor = newColor;
+	}
+	
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		System.out.println(String.format("%d %d",arg0.getX(), arg0.getY()));
 		if(showTitleScreen){
-			if(e.getKeyCode() == KeyEvent.VK_C){
-				configFrame.setVisible(true);
-				String s = configFrame.getConfig();
+			//rectangle playgame
+			if(rect.contains(arg0.getX(), arg0.getY())){
+				hoverPlayGame = true;
+			}
+			else{
+				hoverPlayGame = false;
+			}
+			
+			//rectangle settings
+			if(rectSettings.contains(arg0.getX(),arg0.getY())){
+				hoverSettings = true;
+			}
+			else{
+				hoverSettings = false;
 			}
 		}
 	}
 
-	public void setBallColor(Color newColor){
-		this.ballColor = newColor;
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		
+		if(showTitleScreen){
+			if(hoverPlayGame){
+				showTitleScreen = false;
+				playing = true;
+			}
+			if(hoverSettings){
+				JDialogSettings settings = new JDialogSettings();
+				settings.setModal(true);
+				settings.setVisible(true);
+				settings.dispose();
+			}
+		}
+		
 	}
+
+	
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

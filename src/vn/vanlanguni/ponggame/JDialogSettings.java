@@ -35,7 +35,7 @@ public class JDialogSettings extends JDialog{
 		initMenuComponent();
 		//add Panel
 		this.add(ballPanel);
-		int h_ballPanel = 150;
+		int h_ballPanel = 450;
 		ballPanel.setBounds(0,0,WIDTH,h_ballPanel);
 		ballPanel.setVisible(false);
 		ballPanel.setBorder(new EtchedBorder());

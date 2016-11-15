@@ -71,7 +71,6 @@ public class JDialogSettings extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()== mniSetColorOfBall){
-					setBallColor(ballPanel.getColor());
 					ballPanel.setVisible(true);
 				}
 			}
@@ -100,14 +99,13 @@ public class JDialogSettings extends JDialog{
 				// TODO Auto-generated method stub
 				JButton btnT = (JButton) e.getSource();
 				if(btnT.equals(btnSaveInfo)){
-					setBallColor(ballPanel.getColor());
+					//saveInfo();
 				}
 				else if(btnT.equals(btnExit)){
-					if(BallColor != ballPanel.getColor()){
+					/*if(BallColor != Color.RED){
 						int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?");
 						if(result == JOptionPane.YES_OPTION){
-							setBallColor(ballPanel.getColor());
-							dispose();
+							//saveInfoThenExit();
 						}
 						else if(result == JOptionPane.NO_OPTION){
 							dispose();
@@ -115,7 +113,8 @@ public class JDialogSettings extends JDialog{
 					}
 					else{
 						dispose();
-					}
+					}*/
+					dispose();
 				}
 			}
 		};
@@ -125,14 +124,38 @@ public class JDialogSettings extends JDialog{
 	}
 	
 	
+	private void saveInfoThenExit(){
+		ballPanel.setColor(ballPanel.getColor());
+	}
+	
+	public BallPanel returnBallPanel(){
+		
+		if(isColorBall()){
+			ballPanel = new BallPanel(true,getBallColor());
+		}
+		else {
+			ballPanel = new BallPanel(false,getImageBallIndex());
+		}
+		return ballPanel;
+		
+		//return ballPanel;
+	}
+	
+
+
+	public boolean isColorBall() {
+		if(ballPanel.isIsColorBall()){
+			return true;
+		}
+		return false;
+	}
+	
+	public int getImageBallIndex(){
+		return ballPanel.getnImageIndex();
+	}
 	
 	public Color getBallColor() {
-		return BallColor;
-	}
-
-
-	public void setBallColor(Color ballColor) {
-		BallColor = ballColor;
+		return ballPanel.getColor();
 	}
 
 
@@ -154,4 +177,5 @@ public class JDialogSettings extends JDialog{
 	public void setNamePlayer02(String namePlayer02) {
 		this.namePlayer02 = namePlayer02;
 	}
+	
 }

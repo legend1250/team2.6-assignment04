@@ -20,6 +20,7 @@ package vn.vanlanguni.ponggame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,6 +114,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		try {
 			imagePlayGame = ImageIO.read(new File("images/btn_playgame.png"));
 			imageSettings = ImageIO.read(new File("images/setting.png"));
+			//Ball Image
+			imgSoccerBall = ImageIO.read(new File(imgURL[0]));
+			imgKABall = ImageIO.read(new File(imgURL[1]));
+			imgMasterBall = ImageIO.read(new File(imgURL[2]));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
@@ -290,9 +295,21 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 																	// score
 
 			// draw the ball
-			g.setColor(ballColor);
-			g.fillOval(ballX, ballY, diameter, diameter);
-
+			if(isColorBall){
+				g.setColor(ballColor);
+				g.fillOval(ballX, ballY, diameter, diameter);
+			}
+			else{
+				if(ball.getnImageIndex() == 0){
+					g.drawImage(imgSoccerBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 256, 256, null);
+				}
+				else if (ball.getnImageIndex()== 1){
+					g.drawImage(imgKABall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 333, 328, null);
+				}
+				else if (ball.getnImageIndex() == 2){
+					g.drawImage(imgMasterBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 400, 400, null);
+				}
+			}
 			// draw the paddles
 			g.setColor(Color.RED);
 			g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
@@ -394,8 +411,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			}
 		}
 	}
-
-	@Override
+	
+	JDialogSettings settings;
+	BallPanel ball;
 	public void mouseClicked(MouseEvent arg0) {
 		
 		if(showTitleScreen){
@@ -404,46 +422,42 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				playing = true;
 			}
 			if(hoverSettings){
-				JDialogSettings settings = new JDialogSettings();
+				settings = new JDialogSettings();
 				settings.setModal(true);
 				settings.setVisible(true);
-				setBallColor(settings.getBallColor());
+				ball = settings.returnBallPanel();
+				if(ball.isIsColorBall()){
+					setBallColor(settings.getBallColor());
+					isColorBall = true;
+				}
+				else{
+					isColorBall = false;
+				}
 				settings.dispose();
 			}
 		}
 		
 	}
 
+	private boolean isColorBall;
 	
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	BufferedImage imgBallPlaying,imgSoccerBall, imgKABall, imgMasterBall;
+	String[] imgURL = {
+			"images/SoccerBall.png",
+			"images/KA_Ball.png",
+			"images/MasterBall.png"
+	};
+	
+	
+	public void mouseEntered(MouseEvent arg0) { }
 
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent arg0) { }
 
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent arg0) { }
 
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent arg0) { }
 
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseDragged(MouseEvent arg0) { }
 
 	
 }

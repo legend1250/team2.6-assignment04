@@ -105,6 +105,16 @@ public class BallPanel extends JPanel implements MouseListener{
 	}
 	
 	
+	public BallPanel(boolean isColorBall, Color ballColor){
+		this.IsColorBall = true;
+		this.ballColor = ballColor;
+	}
+	
+	public BallPanel(boolean isColorBall, int nImageIndex){
+		this.IsColorBall = false;
+		this.nImageIndex = nImageIndex;
+	}
+	
 	private void changeBallColor(){
 		Color newColor = JColorChooser.showDialog(this, "Choose Ball Color",getColor());
 		setColor(newColor);
@@ -176,6 +186,5 @@ public class BallPanel extends JPanel implements MouseListener{
 
 
 	public void mouseReleased(MouseEvent e) {}
-
 
 }

@@ -427,7 +427,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				settings.setVisible(true);
 				ball = settings.returnBallPanel();
 				if(ball.isIsColorBall()){
-					setBallColor(settings.getBallColor());
+					setBallColor(ball.getColor());
 					isColorBall = true;
 				}
 				else{

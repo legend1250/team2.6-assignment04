@@ -1,9 +1,3 @@
-/*
- * 
- * 
- * 
- * 
- */
 package vn.vanlanguni.ponggame;
 
 

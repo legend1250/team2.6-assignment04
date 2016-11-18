@@ -3,11 +3,11 @@ package vn.vanlanguni.ponggame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.sun.javafx.geom.Rectangle;
 
 public class BallPanel extends JPanel implements MouseListener{
 
@@ -31,9 +30,10 @@ public class BallPanel extends JPanel implements MouseListener{
 	int x0 = 320, y0 = 50, r0 = 50;
 	
 	//Image Ball
-	Rectangle[] rectImageBall = new Rectangle[3];
+	Circle[] CircleImage = new Circle[3];
 	int[] x = {45,145,245}, y = {105};
 	int nImageIndex = 0;
+	
 	//Image resources
 	BufferedImage imgSoccerBall, imgKABall, imgMasterBall;
 	String[] imgURL = {
@@ -80,7 +80,6 @@ public class BallPanel extends JPanel implements MouseListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				if(arg0.getSource() == btnChangeBallColor){
 					changeBallColor();
 				}
@@ -90,10 +89,11 @@ public class BallPanel extends JPanel implements MouseListener{
 		btnChangeBallColor.addActionListener(actionButton);
 		
 		//ImageBall
-		addMouseListener(this);
-		rectImageBall[0] = new Rectangle(x[0], y[0], r0, r0);
-		rectImageBall[1] = new Rectangle(x[1], y[0], r0, r0);
-		rectImageBall[2] = new Rectangle(x[2], y[0], r0, r0);
+		addMouseListener(this);		
+		
+		CircleImage[0] = new Circle(x[0], y[0], r0);
+		CircleImage[1] = new Circle(x[1], y[0], r0);
+		CircleImage[2] = new Circle(x[2], y[0], r0);
 		
 		try {
 			imgSoccerBall = ImageIO.read(new File(imgURL[0]));
@@ -136,7 +136,7 @@ public class BallPanel extends JPanel implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		for(int i = 0 ; i < 3 ; i++){
-			if(rectImageBall[i].contains(e.getX(),e.getY())){
+			if(CircleImage[i].contains(e.getX(),e.getY())){
 				setIsImageBall(true);
 				setIsColorBall(false);
 				setnImageIndex(i);
@@ -187,4 +187,26 @@ public class BallPanel extends JPanel implements MouseListener{
 
 	public void mouseReleased(MouseEvent e) {}
 
+}
+
+class Circle{
+	
+	int x,y,r;
+
+	public Circle(int x, int y, int r) {
+		super();
+		this.x = x+r/2;
+		this.y = y+r/2;
+		this.r = r/2;
+	}
+	
+	public boolean contains(int x, int y){
+		
+		double range = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
+		if(range < this.r){
+			return true;
+		}
+		return false;
+	}
+	
 }

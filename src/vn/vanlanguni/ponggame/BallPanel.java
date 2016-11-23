@@ -2,10 +2,6 @@ package vn.vanlanguni.ponggame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -13,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,13 +20,11 @@ public class BallPanel extends JPanel implements MouseListener{
 	Color ballColor = Color.RED;
 	
 	//
-	private boolean IsColorBall = true,
-					IsImageBall = false;
-	int x0 = 320, y0 = 50, r0 = 50;
+	int x0 = 320, y0 = 20, r0 = 50;
 	
 	//Image Ball
-	Circle[] CircleImage = new Circle[3];
-	int[] x = {45,145,245}, y = {105};
+	Circle[] CircleImage = new Circle[4];
+	int[] x = {45,145,245,345}, y = {105};
 	int nImageIndex = 0;
 	
 	//Image resources
@@ -41,52 +34,36 @@ public class BallPanel extends JPanel implements MouseListener{
 			"images/KA_Ball.png",
 			"images/MasterBall.png"
 	};
+	
 	public void paint(Graphics g){
 		super.paint(g);
-	
-		if(IsColorBall){
-			g.setColor(ballColor);
+		
+		if(nImageIndex == 0){
+			g.setColor(getColor());
 			g.fillOval(x0, y0, r0, r0);
 		}
-		else if(IsImageBall){
-			if(nImageIndex == 0){
-				g.drawImage(imgSoccerBall, x0, y0, x0 + r0, y0 + r0, 0, 0, 256, 256, null);
-			}
-			else if (nImageIndex == 1){
-				g.drawImage(imgKABall, x0, y0, x0 + r0, y0 + r0, 0, 0, 333, 328, null);
-			}
-			else if (nImageIndex == 2){
-				g.drawImage(imgMasterBall, x0, y0, x0 + r0, y0 + r0, 0, 0, 400, 400, null);
-			}
+		else if(nImageIndex == 1){
+			g.drawImage(imgSoccerBall, x0, y0, x0 + r0, y0 + r0, 0, 0, 256, 256, null);
 		}
-		g.drawImage(imgSoccerBall, x[0], y[0], x[0] + r0, y[0] + r0, 0, 0, 256, 256, null);
-		g.drawImage(imgKABall, x[1], y[0], x[1] + r0, y[0] + r0, 0, 0, 333, 328, null);
-		g.drawImage(imgMasterBall, x[2], y[0], x[2] + r0, y[0] + r0, 0, 0, 400, 400, null);
+		else if (nImageIndex == 2){
+			g.drawImage(imgKABall, x0, y0, x0 + r0, y0 + r0, 0, 0, 333, 328, null);
+		}
+		else if (nImageIndex == 3){
+			g.drawImage(imgMasterBall, x0, y0, x0 + r0, y0 + r0, 0, 0, 400, 400, null);
+		}
+	
+		g.setColor(getColor());
+		g.fillOval(x[0], y[0], r0, r0);
+		g.drawImage(imgSoccerBall, x[1], y[0], x[1] + r0, y[0] + r0, 0, 0, 256, 256, null);
+		g.drawImage(imgKABall, x[2], y[0], x[2] + r0, y[0] + r0, 0, 0, 333, 328, null);
+		g.drawImage(imgMasterBall, x[3], y[0], x[3] + r0, y[0] + r0, 0, 0, 400, 400, null);
 		
 	}
 	
-	JButton btnChangeBallColor = new JButton("Change color");
 	
 	public BallPanel(){
 		//add component
 		setLayout(null);
-		add(btnChangeBallColor);
-		Insets isMargin = new Insets(1, 1, 1, 1);
-		
-		btnChangeBallColor.setBounds(20, 20, 95, 35);
-		btnChangeBallColor.setMargin(isMargin);
-		//ActionListener
-		ActionListener actionButton = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(arg0.getSource() == btnChangeBallColor){
-					changeBallColor();
-				}
-			}
-		};
-		//add ActionListener to button
-		btnChangeBallColor.addActionListener(actionButton);
 		
 		//ImageBall
 		addMouseListener(this);		
@@ -94,6 +71,7 @@ public class BallPanel extends JPanel implements MouseListener{
 		CircleImage[0] = new Circle(x[0], y[0], r0);
 		CircleImage[1] = new Circle(x[1], y[0], r0);
 		CircleImage[2] = new Circle(x[2], y[0], r0);
+		CircleImage[3] = new Circle(x[3], y[0], r0);
 		
 		try {
 			imgSoccerBall = ImageIO.read(new File(imgURL[0]));
@@ -105,40 +83,21 @@ public class BallPanel extends JPanel implements MouseListener{
 	}
 	
 	
-	public BallPanel(boolean isColorBall, Color ballColor){
-		this.IsColorBall = true;
+	public BallPanel(int nIndex, Color ballColor){
+		this.nImageIndex = nIndex;
 		this.ballColor = ballColor;
-	}
-	
-	public BallPanel(boolean isColorBall, int nImageIndex){
-		this.IsColorBall = false;
-		this.nImageIndex = nImageIndex;
 	}
 	
 	private void changeBallColor(){
 		Color newColor = JColorChooser.showDialog(this, "Choose Ball Color",getColor());
 		setColor(newColor);
-		setIsImageBall(false);
-		setIsColorBall(true);
 		repaint();
 	}
 	
 	
-	public void setColor(Color newColor){
-		this.ballColor = newColor;
-	}
-
-	public Color getColor(){
-		return ballColor;
-	}
-
-
-	@Override
 	public void mouseClicked(MouseEvent e) {
-		for(int i = 0 ; i < 3 ; i++){
+		for(int i = 0 ; i < 4 ; i++){
 			if(CircleImage[i].contains(e.getX(),e.getY())){
-				setIsImageBall(true);
-				setIsColorBall(false);
 				setnImageIndex(i);
 			}
 		}
@@ -146,32 +105,23 @@ public class BallPanel extends JPanel implements MouseListener{
 	}
 
 
-	public boolean isIsColorBall() {
-		return IsColorBall;
+	public void setColor(Color newColor){
+		this.ballColor = newColor;
 	}
 
-
-	public void setIsColorBall(boolean isColorBall) {
-		IsColorBall = isColorBall;
+	public Color getColor(){
+		return ballColor;
 	}
-
-
-	public boolean isIsImageBall() {
-		return IsImageBall;
-	}
-
-
-	public void setIsImageBall(boolean isImageBall) {
-		IsImageBall = isImageBall;
-	}
-
-
+	
 	public int getnImageIndex() {
 		return nImageIndex;
 	}
 
 
 	public void setnImageIndex(int nImageIndex) {
+		if(nImageIndex == 0){
+			changeBallColor();
+		}
 		this.nImageIndex = nImageIndex;
 	}
 

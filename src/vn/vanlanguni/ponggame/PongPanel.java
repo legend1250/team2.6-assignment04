@@ -67,7 +67,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int diameter = 20;
 	private int ballDeltaX = -1;
 	private int ballDeltaY = 3;
-	private Color ballColor = Color.RED;
 	
 	/** Player 1's paddle: position and size */
 	private int playerOneX = 0;
@@ -295,20 +294,18 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 																	// score
 
 			// draw the ball
-			if(isColorBall){
+			if(nImageBallIndex == 0){
 				g.setColor(ballColor);
 				g.fillOval(ballX, ballY, diameter, diameter);
 			}
-			else{
-				if(ball.getnImageIndex() == 0){
-					g.drawImage(imgSoccerBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 256, 256, null);
-				}
-				else if (ball.getnImageIndex()== 1){
-					g.drawImage(imgKABall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 333, 328, null);
-				}
-				else if (ball.getnImageIndex() == 2){
-					g.drawImage(imgMasterBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 400, 400, null);
-				}
+			else if(nImageBallIndex == 1){
+				g.drawImage(imgSoccerBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 256, 256, null);
+			}
+			else if (nImageBallIndex == 2){
+				g.drawImage(imgKABall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 333, 328, null);
+			}
+			else if (nImageBallIndex == 3){
+				g.drawImage(imgMasterBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 400, 400, null);
 			}
 			// draw the paddles
 			g.setColor(Color.RED);
@@ -386,11 +383,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		
 	}
 	
-	public void setBallColor(Color newColor){
-		this.ballColor = newColor;
-	}
-	
-	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		//System.out.println(String.format("%d %d",arg0.getX(), arg0.getY()));
 		if(showTitleScreen){
@@ -412,8 +404,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		}
 	}
 	
-	JDialogSettings settings;
-	BallPanel ball;
+	JDialogSettings settings = new JDialogSettings();
+	JDialogSettings ballSettings;
+	
 	public void mouseClicked(MouseEvent arg0) {
 		
 		if(showTitleScreen){
@@ -422,16 +415,17 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				playing = true;
 			}
 			if(hoverSettings){
-				settings = new JDialogSettings();
+				
 				settings.setModal(true);
 				settings.setVisible(true);
-				ball = settings.returnBallPanel();
-				if(ball.isIsColorBall()){
-					setBallColor(ball.getColor());
-					isColorBall = true;
+				
+				ballSettings = settings.getSettingsBall();
+				if(ballSettings.getnIndexImageBall() == 0 ){
+					nImageBallIndex = 0;
+					setBallColor(ballSettings.getBallColor());
 				}
 				else{
-					isColorBall = false;
+					nImageBallIndex = ballSettings.getnIndexImageBall();
 				}
 				settings.dispose();
 			}
@@ -439,7 +433,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		
 	}
 
-	private boolean isColorBall;
+	private int nImageBallIndex = 0;
+	private Color ballColor = Color.RED;
 	
 	BufferedImage imgBallPlaying,imgSoccerBall, imgKABall, imgMasterBall;
 	String[] imgURL = {
@@ -448,6 +443,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			"images/MasterBall.png"
 	};
 	
+	public void setBallColor(Color ballColor) {
+		this.ballColor = ballColor;
+	}
 	
 	public void mouseEntered(MouseEvent arg0) { }
 

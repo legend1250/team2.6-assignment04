@@ -15,15 +15,14 @@ import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 
 public class JDialogSettings extends JDialog{
-	final static int WIDTH = 400, HEIGHT = 600;
-	
-	private Color BallColor;
-	private String namePlayer01, namePlayer02;
-	private Color BackgroundColor;
-	
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6319977207462766493L;
 
-	BallPanel ballPanel = new BallPanel();
+	final static int WIDTH = 450, HEIGHT = 500;
+	
+	BallPanel ballPanel;
 	
 	public JDialogSettings(){
 		setTitle("Config infomation");
@@ -34,8 +33,9 @@ public class JDialogSettings extends JDialog{
 		
 		initMenuComponent();
 		//add Panel
+		ballPanel = new BallPanel();
 		this.add(ballPanel);
-		int h_ballPanel = 450;
+		int h_ballPanel = 350;
 		ballPanel.setBounds(0,0,WIDTH,h_ballPanel);
 		ballPanel.setVisible(false);
 		ballPanel.setBorder(new EtchedBorder());
@@ -86,34 +86,36 @@ public class JDialogSettings extends JDialog{
 		add(btnSaveInfo);
 		btnSaveInfo.setFocusable(false);
 		btnSaveInfo.setMargin(isMargin);
-		btnSaveInfo.setBounds(240, 500, 65, 30);
+		btnSaveInfo.setBounds(280, 400, 65, 30);
 		add(btnExit);
 		btnExit.setFocusable(false);
 		btnExit.setMargin(isMargin);
-		btnExit.setBounds(315, 500, 60, 30);
+		btnExit.setBounds(365, 400, 60, 30);
 		
 		ActionListener actionButton = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				JButton btnT = (JButton) e.getSource();
 				if(btnT.equals(btnSaveInfo)){
-					//saveInfo();
+					saveInfobBallPanel();
 				}
 				else if(btnT.equals(btnExit)){
-					/*if(BallColor != Color.RED){
-						int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?");
+					if(getBallColor() != ballPanel.getColor() || getnIndexImageBall() != ballPanel.getnImageIndex()){
+						int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?","WARNING",
+						        JOptionPane.YES_NO_OPTION);
 						if(result == JOptionPane.YES_OPTION){
-							//saveInfoThenExit();
+							saveInfobBallPanel();
 						}
 						else if(result == JOptionPane.NO_OPTION){
+							settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
 							dispose();
 						}
 					}
 					else{
 						dispose();
-					}*/
+					}
+					
 					dispose();
 				}
 			}
@@ -123,59 +125,44 @@ public class JDialogSettings extends JDialog{
 		
 	}
 	
+	private int nIndexImageBall = 0;
+	private Color BallColor = Color.RED;
 	
-	private void saveInfoThenExit(){
-		ballPanel.setColor(ballPanel.getColor());
+	JDialogSettings settingsBall;
+	
+	public JDialogSettings(int nIndex, Color newColor){
+		this.nIndexImageBall = nIndex;
+		this.BallColor = newColor;
 	}
 	
-	public BallPanel returnBallPanel(){
-		
-		if(isColorBall()){
-			ballPanel = new BallPanel(true,getBallColor());
-		}
-		else {
-			ballPanel = new BallPanel(false,getImageBallIndex());
-		}
-		return ballPanel;
-		
-		//return ballPanel;
+	
+	public void saveInfobBallPanel(){
+		int nIndex = ballPanel.getnImageIndex();
+		Color newColor = ballPanel.getColor();
+		setnIndexImageBall(nIndex);
+		setBallColor(newColor);
+		settingsBall = new JDialogSettings(nIndex,newColor);
+	}
+
+	public JDialogSettings getSettingsBall(){
+		return settingsBall;
 	}
 	
+	
+	public void setnIndexImageBall(int nIndexImageBall) {
+		this.nIndexImageBall = nIndexImageBall;
+	}
+	
+	public int getnIndexImageBall() {
+		return nIndexImageBall;
+	}
+
+	public void setBallColor(Color ballColor) {
+		BallColor = ballColor;
+	}
 
 
-	public boolean isColorBall() {
-		if(ballPanel.isIsColorBall()){
-			return true;
-		}
-		return false;
-	}
-	
-	public int getImageBallIndex(){
-		return ballPanel.getnImageIndex();
-	}
-	
 	public Color getBallColor() {
-		return ballPanel.getColor();
+		return BallColor;
 	}
-
-
-	public String getNamePlayer01() {
-		return namePlayer01;
-	}
-
-
-	public void setNamePlayer01(String namePlayer01) {
-		this.namePlayer01 = namePlayer01;
-	}
-
-
-	public String getNamePlayer02() {
-		return namePlayer02;
-	}
-
-
-	public void setNamePlayer02(String namePlayer02) {
-		this.namePlayer02 = namePlayer02;
-	}
-	
 }

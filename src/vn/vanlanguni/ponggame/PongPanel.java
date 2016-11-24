@@ -32,6 +32,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Random;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -124,6 +127,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		// call step() 60 fps
 		Timer timer = new Timer(1000 / 60, this);
 		timer.start();
+		
+		//create plus or minus
+		initPlusOrMinus();
 	}
 
 	/** Implement actionPerformed */
@@ -311,6 +317,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			g.setColor(Color.RED);
 			g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
 			g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
+			
 		} else if (gameOver) {
 
 			/* Show End game screen with winner name and score */
@@ -443,9 +450,42 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			"images/MasterBall.png"
 	};
 	
-	public void setBallColor(Color ballColor) {
+	private void setBallColor(Color ballColor) {
 		this.ballColor = ballColor;
 	}
+	
+	
+	//
+	private boolean ShowingMinus = false;
+	int seconds;
+	
+	private void initPlusOrMinus(){
+		
+		if(!ShowingMinus){
+			seconds = new Random().nextInt(15)+1;
+			//int seconds = 5;
+			System.out.println(seconds);
+			Timer timerInitPlus = new Timer(seconds*1000, new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Date date = new Date();
+					System.out.println(date);
+					
+				}
+			});
+			timerInitPlus.start();
+			timerInitPlus.setRepeats(false);
+			seconds = new Random().nextInt(15)+1;
+			timerInitPlus.setDelay(seconds*1000);
+			timerInitPlus.setRepeats(true);
+			
+		}
+		
+		
+	}
+	
+	
 	
 	public void mouseEntered(MouseEvent arg0) { }
 

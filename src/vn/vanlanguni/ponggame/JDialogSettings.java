@@ -113,6 +113,7 @@ public class JDialogSettings extends JDialog{
 						}
 					}
 					else{
+						settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
 						dispose();
 					}
 					

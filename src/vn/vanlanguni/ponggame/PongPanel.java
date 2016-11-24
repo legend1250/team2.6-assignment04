@@ -20,7 +20,6 @@ package vn.vanlanguni.ponggame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +36,6 @@ import java.util.Random;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -120,6 +118,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			imgSoccerBall = ImageIO.read(new File(imgURL[0]));
 			imgKABall = ImageIO.read(new File(imgURL[1]));
 			imgMasterBall = ImageIO.read(new File(imgURL[2]));
+			//Plus Minus image
+			imagePlus = ImageIO.read(new File("images/plus.png"));
+			imageMinus = ImageIO.read(new File("images/minus.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
@@ -128,8 +129,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		Timer timer = new Timer(1000 / 60, this);
 		timer.start();
 		
-		//create plus or minus
-		initPlusOrMinus();
+		tmInitPlus = new java.util.Timer();
+		
 	}
 
 	/** Implement actionPerformed */
@@ -204,6 +205,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					}
 					ballX = 200;
 					ballY = 200;
+					
+					//FIXME ask teacher for help
+					ShowingPlus = false;
+					createPlusPoint(new Random().nextInt(15)+1);
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
@@ -225,6 +230,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					}
 					ballX = 200;
 					ballY = 200;
+					
+					//FIXME ask teacher for help
+					ShowingPlus = false;
+					createPlusPoint(new Random().nextInt(15)+1);
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
@@ -235,8 +244,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			// move the ball
 			ballX += ballDeltaX;
 			ballY += ballDeltaY;
+			
 		}
-
+		
 		// stuff has moved, tell this JPanel to repaint itself
 		repaint();
 	}
@@ -273,6 +283,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			else{
 				g.drawImage(imageSettings, xSettings, ySettings, xSettings + wSettings, ySettings + hSettings, 0, 0, 300, 300, null);
 			}
+			
+			//reset score each player
+			playerOneScore = playerTwoScore = 0;
 			
 		} else if (playing) {
 
@@ -318,6 +331,20 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
 			g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 			
+			if(ShowingPlus){
+				if(seconds%2==0){
+					g.drawImage(imagePlus, xPlus, yPlus, xPlus + rPlus, yPlus + rPlus, 0, 0, 256, 256, null); //Plus
+				}
+				else{
+					g.drawImage(imageMinus, xPlus, yPlus, xPlus + rPlus, yPlus + rPlus, 0, 0, 256, 256, null); //Minus
+				}
+				
+				if(isInterception()){
+					ShowingPlus = false;
+					seconds = new Random().nextInt(15)+1;
+					createPlusPoint(seconds);
+				}
+			}
 		} else if (gameOver) {
 
 			/* Show End game screen with winner name and score */
@@ -341,8 +368,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 18));
 			g.drawString("Press 'Space' to restart the game", 150, 250);
 			
-			//reset score each player
-			playerOneScore = playerTwoScore = 0;
+			//stop createPoint
+			ShowingPlus = false;
 		}
 	}
 
@@ -420,6 +447,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			if(hoverPlayGame){
 				showTitleScreen = false;
 				playing = true;
+				seconds = new Random().nextInt(15)+1;
+				createPlusPoint(seconds);
 			}
 			if(hoverSettings){
 				
@@ -455,37 +484,42 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	}
 	
 	
-	//
-	private boolean ShowingMinus = false;
+	java.util.Timer tmInitPlus;
+	private boolean ShowingPlus = false;
 	int seconds;
+	int xPlus,yPlus,rPlus;
+	//ImagePlusMinus
+	BufferedImage imagePlus, imageMinus;
 	
-	private void initPlusOrMinus(){
-		
-		if(!ShowingMinus){
-			seconds = new Random().nextInt(15)+1;
-			//int seconds = 5;
-			System.out.println(seconds);
-			Timer timerInitPlus = new Timer(seconds*1000, new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Date date = new Date();
-					System.out.println(date);
-					
+	private void createPlusPoint(int seconds){
+		System.out.println(seconds);
+		System.out.println(new Date());
+		tmInitPlus.schedule(new TimerTask() {
+			public void run() {
+				int n = 420;
+				xPlus = new Random().nextInt(n)+1;
+				yPlus = new Random().nextInt(n)+1;
+				while ( rPlus < 30 || rPlus > 50){
+					rPlus = new Random().nextInt(50)+1;
 				}
-			});
-			timerInitPlus.start();
-			timerInitPlus.setRepeats(false);
-			seconds = new Random().nextInt(15)+1;
-			timerInitPlus.setDelay(seconds*1000);
-			timerInitPlus.setRepeats(true);
-			
-		}
-		
-		
+				ShowingPlus = true;
+				System.out.println(new Date());
+			}
+		}, seconds*1000);
 	}
 	
-	
+	private boolean isInterception(){
+		int r = rPlus/2;
+		int x0 = ballX + diameter/2;
+		int y0 = ballY + diameter/2;
+		int x1 = xPlus + r;
+		int y1 = yPlus + r;
+		int range = (int) Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
+		if(range < r + diameter/2){
+			return true;
+		}
+		return false;
+	}
 	
 	public void mouseEntered(MouseEvent arg0) { }
 

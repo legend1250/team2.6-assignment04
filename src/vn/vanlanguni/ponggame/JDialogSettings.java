@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -42,6 +44,17 @@ public class JDialogSettings extends JDialog{
 		
 		initComponents();		
 		
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowClosing(e);
+				AskingCloseJDialog();
+			}
+
+			
+		});
 	}
 	
 	JMenuBar mnbMenuBar;
@@ -101,22 +114,7 @@ public class JDialogSettings extends JDialog{
 					saveInfobBallPanel();
 				}
 				else if(btnT.equals(btnExit)){
-					if(getBallColor() != ballPanel.getColor() || getnIndexImageBall() != ballPanel.getnImageIndex()){
-						int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?","WARNING",
-						        JOptionPane.YES_NO_OPTION);
-						if(result == JOptionPane.YES_OPTION){
-							saveInfobBallPanel();
-						}
-						else if(result == JOptionPane.NO_OPTION){
-							settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
-							dispose();
-						}
-					}
-					else{
-						settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
-						dispose();
-					}
-					
+					AskingCloseJDialog();
 					dispose();
 				}
 			}
@@ -137,7 +135,7 @@ public class JDialogSettings extends JDialog{
 	}
 	
 	
-	public void saveInfobBallPanel(){
+	private void saveInfobBallPanel(){
 		int nIndex = ballPanel.getnImageIndex();
 		Color newColor = ballPanel.getColor();
 		setnIndexImageBall(nIndex);
@@ -149,6 +147,23 @@ public class JDialogSettings extends JDialog{
 		return settingsBall;
 	}
 	
+	private void AskingCloseJDialog(){
+		if(getBallColor() != ballPanel.getColor() || getnIndexImageBall() != ballPanel.getnImageIndex()){
+			int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?","WARNING",
+			        JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION){
+				saveInfobBallPanel();
+			}
+			else if(result == JOptionPane.NO_OPTION){
+				settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
+				dispose();
+			}
+		}
+		else{
+			settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
+			dispose();
+		}
+	}
 	
 	public void setnIndexImageBall(int nIndexImageBall) {
 		this.nIndexImageBall = nIndexImageBall;

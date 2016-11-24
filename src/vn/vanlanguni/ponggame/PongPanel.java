@@ -31,6 +31,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimerTask;
@@ -65,7 +66,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	/** The ball: position, diameter */
 	private int ballX = 200;
 	private int ballY = 200;
-	private int diameter = 20;
+	private int diameter = 25;
 	private int ballDeltaX = -1;
 	private int ballDeltaY = 3;
 	
@@ -172,9 +173,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			 */
 			int nextBallLeft = ballX + ballDeltaX;
 			int nextBallRight = ballX + diameter + ballDeltaX;
-			// FIXME Something not quite right here
-			int nextBallTop = ballY;
-			int nextBallBottom = ballY + diameter;
+			
+			int nextBallTop = ballY + ballDeltaY;
+			int nextBallBottom = ballY + ballDeltaY + diameter;
 
 			// Player 1's paddle position
 			int playerOneRight = playerOneX + playerOneWidth;
@@ -182,9 +183,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			int playerOneBottom = playerOneY + playerOneHeight;
 
 			// Player 2's paddle position
-			float playerTwoLeft = playerTwoX;
-			float playerTwoTop = playerTwoY;
-			float playerTwoBottom = playerTwoY + playerTwoHeight;
+			int playerTwoLeft = playerTwoX;
+			int playerTwoTop = playerTwoY;
+			int playerTwoBottom = playerTwoY + playerTwoHeight;
 
 			// ball bounces off top and bottom of screen
 			if (nextBallTop < 0 || nextBallBottom > getHeight()) {
@@ -197,7 +198,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				if (nextBallTop > playerOneBottom || nextBallBottom < playerOneTop) {
 
 					playerTwoScore++;
-
+					
+					//FIXME ask teacher for help
+					createPlusPoint();
+					
 					// Player 2 Win, restart the game
 					if (playerTwoScore == 3) {
 						playing = false;
@@ -206,9 +210,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					ballX = 200;
 					ballY = 200;
 					
-					//FIXME ask teacher for help
-					ShowingPlus = false;
-					createPlusPoint(new Random().nextInt(15)+1);
+					
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
@@ -223,6 +225,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 
 					playerOneScore++;
 
+					//FIXME ask teacher for help
+					createPlusPoint();
+					
 					// Player 1 Win, restart the game
 					if (playerOneScore == 3) {
 						playing = false;
@@ -231,9 +236,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					ballX = 200;
 					ballY = 200;
 					
-					//FIXME ask teacher for help
-					ShowingPlus = false;
-					createPlusPoint(new Random().nextInt(15)+1);
+					
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
@@ -245,6 +248,11 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			ballX += ballDeltaX;
 			ballY += ballDeltaY;
 			
+			if(ShowingPlus){
+				if(isInterception()){
+					createPlusPoint();
+				}
+			}
 		}
 		
 		// stuff has moved, tell this JPanel to repaint itself
@@ -337,12 +345,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				}
 				else{
 					g.drawImage(imageMinus, xPlus, yPlus, xPlus + rPlus, yPlus + rPlus, 0, 0, 256, 256, null); //Minus
-				}
-				
-				if(isInterception()){
-					ShowingPlus = false;
-					seconds = new Random().nextInt(15)+1;
-					createPlusPoint(seconds);
 				}
 			}
 		} else if (gameOver) {
@@ -447,8 +449,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			if(hoverPlayGame){
 				showTitleScreen = false;
 				playing = true;
-				seconds = new Random().nextInt(15)+1;
-				createPlusPoint(seconds);
+				createPlusPoint();
 			}
 			if(hoverSettings){
 				
@@ -490,35 +491,51 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	int xPlus,yPlus,rPlus;
 	//ImagePlusMinus
 	BufferedImage imagePlus, imageMinus;
-	
-	private void createPlusPoint(int seconds){
-		System.out.println(seconds);
-		System.out.println(new Date());
-		tmInitPlus.schedule(new TimerTask() {
-			public void run() {
-				int n = 420;
-				xPlus = new Random().nextInt(n)+1;
-				yPlus = new Random().nextInt(n)+1;
-				while ( rPlus < 30 || rPlus > 50){
-					rPlus = new Random().nextInt(50)+1;
-				}
-				ShowingPlus = true;
-				System.out.println(new Date());
+	Random rd = new Random();
+	private void createPlusPoint(){
+		if(playing){
+			resetPlus();
+			do {
+				seconds = rd.nextInt(15)+1;
 			}
-		}, seconds*1000);
+			while(seconds < 5);
+			ShowingPlus = false;
+			System.out.println(seconds);
+			System.out.println(new Date());
+			tmInitPlus.schedule(new TimerTask() {
+				public void run() {
+					int n = 400;
+					xPlus = rd.nextInt(n)+1;
+					yPlus = rd.nextInt(n)+1;
+					do {
+						rPlus = rd.nextInt(40)+1;
+					}
+					while ( rPlus < 20);
+					ShowingPlus = true;
+					System.out.println((xPlus + rPlus/2) + "-" +(yPlus + rPlus/2) + "\tR: " + rPlus + " \t" +new SimpleDateFormat("HH:mm:ss").format(new Date()));
+				}
+			}, seconds*1000);
+		}
+		
 	}
 	
 	private boolean isInterception(){
-		int r = rPlus/2;
 		int x0 = ballX + diameter/2;
 		int y0 = ballY + diameter/2;
-		int x1 = xPlus + r;
-		int y1 = yPlus + r;
-		int range = (int) Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
-		if(range < r + diameter/2){
+		int x1 = xPlus + rPlus/2;
+		int y1 = yPlus + rPlus/2;
+		double range = Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
+		if(range < rPlus/2 + diameter/2){
 			return true;
 		}
 		return false;
+	}
+	
+	private void resetPlus(){
+		seconds = 0;
+		xPlus = 0;
+		yPlus = 0;
+		rPlus = 0;
 	}
 	
 	public void mouseEntered(MouseEvent arg0) { }

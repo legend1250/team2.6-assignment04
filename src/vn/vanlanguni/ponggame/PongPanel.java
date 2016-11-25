@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -52,6 +53,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 
 	/** Background. */
 	private Color backgroundColor = Color.BLACK;
+	ImageIcon imgBackGround = new ImageIcon("images/Space.jpg");
 
 	/** State on the control keys. */
 	private boolean upPressed;
@@ -250,6 +252,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 		if (showTitleScreen) {
 
 			/* Show welcome screen */
+			g.drawImage(imgBackGround.getImage(), 0,0,500,500, null);
 
 			// Draw game title and start message
 			g.setColor(Color.GREEN);

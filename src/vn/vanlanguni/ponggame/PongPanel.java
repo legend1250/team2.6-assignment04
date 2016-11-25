@@ -66,7 +66,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	/** The ball: position, diameter */
 	private int ballX = 200;
 	private int ballY = 200;
-	private int diameter = 25;
+	private int diameter = 20;
 	private int ballDeltaX = -1;
 	private int ballDeltaY = 3;
 	
@@ -199,9 +199,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 
 					playerTwoScore++;
 					
-					//FIXME ask teacher for help
-					createPlusPoint();
-					
 					// Player 2 Win, restart the game
 					if (playerTwoScore == 3) {
 						playing = false;
@@ -210,11 +207,17 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					ballX = 200;
 					ballY = 200;
 					
-					
+					//player is playing with ball
+					playerPlayingBall = 0; //there is no player is playing
+					//FIXME ask teacher for help
+					createPlusPoint();
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
 					ballDeltaX *= -1;
+					
+					//player is playing with ball
+					playerPlayingBall = 1;
 				}
 			}
 
@@ -225,9 +228,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 
 					playerOneScore++;
 
-					//FIXME ask teacher for help
-					createPlusPoint();
-					
 					// Player 1 Win, restart the game
 					if (playerOneScore == 3) {
 						playing = false;
@@ -236,11 +236,17 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					ballX = 200;
 					ballY = 200;
 					
-					
+					//player is playing with ball
+					playerPlayingBall = 0; //there is no player is playing
+					//FIXME ask teacher for help
+					createPlusPoint();
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
 					ballDeltaX *= -1;
+					
+					//player is playing with ball
+					playerPlayingBall = 2;
 				}
 			}
 
@@ -249,10 +255,16 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			ballY += ballDeltaY;
 			
 			if(ShowingPlus){
-				if(isInterception()){
+				if(playerPlayingBall != 0 && isInterception()){
+					ShowingPlus = false;
 					createPlusPoint();
 				}
+				
 			}
+		}
+		else if(gameOver){
+			playerPlayingBall = 0;
+			ShowingPlus = false;
 		}
 		
 		// stuff has moved, tell this JPanel to repaint itself
@@ -370,8 +382,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 18));
 			g.drawString("Press 'Space' to restart the game", 150, 250);
 			
-			//stop createPoint
-			ShowingPlus = false;
 		}
 	}
 
@@ -486,12 +496,14 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	
 	
 	java.util.Timer tmInitPlus;
+	private int seconds;
+	private int xPlus,yPlus,rPlus;
+	private int playerPlayingBall = 0;
 	private boolean ShowingPlus = false;
-	int seconds;
-	int xPlus,yPlus,rPlus;
 	//ImagePlusMinus
 	BufferedImage imagePlus, imageMinus;
 	Random rd = new Random();
+	
 	private void createPlusPoint(){
 		if(playing){
 			resetPlus();
@@ -499,7 +511,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				seconds = rd.nextInt(15)+1;
 			}
 			while(seconds < 5);
-			ShowingPlus = false;
 			System.out.println(seconds);
 			System.out.println(new Date());
 			tmInitPlus.schedule(new TimerTask() {
@@ -511,8 +522,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 						rPlus = rd.nextInt(40)+1;
 					}
 					while ( rPlus < 20);
-					ShowingPlus = true;
 					System.out.println((xPlus + rPlus/2) + "-" +(yPlus + rPlus/2) + "\tR: " + rPlus + " \t" +new SimpleDateFormat("HH:mm:ss").format(new Date()));
+					ShowingPlus = true;
 				}
 			}, seconds*1000);
 		}
@@ -532,6 +543,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	}
 	
 	private void resetPlus(){
+		playerPlayingBall = 0;
 		seconds = 0;
 		xPlus = 0;
 		yPlus = 0;

@@ -144,8 +144,11 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 
 	/** Repeated task */
 	public void step() {
-
-		if (playing) {
+		if(showTitleScreen){
+			//reset score each player
+			playerOneScore = playerTwoScore = 0;
+		}
+		else if (playing) {
 
 			/* Playing mode */
 
@@ -271,10 +274,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 				if(playerPlayingBall != 0 && isInterception()){
 					ShowingPlus = false;
 					if(playerPlayingBall == 1){
-						playerOneHeight = interceptPlusMinus(seconds, playerOneHeight);
+						playerOneHeight = interceptPlusMinus(playerOneHeight);
 					}
 					else if(playerPlayingBall == 2){
-						playerTwoHeight = interceptPlusMinus(seconds, playerTwoHeight);
+						playerTwoHeight = interceptPlusMinus(playerTwoHeight);
 					}
 					createPlusPoint();
 				}
@@ -322,8 +325,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 				g.drawImage(imageSettings, xSettings, ySettings, xSettings + wSettings, ySettings + hSettings, 0, 0, 300, 300, null);
 			}
 			
-			//reset score each player
-			playerOneScore = playerTwoScore = 0;
 		} else if (playing) {
 
 			/* Game is playing */
@@ -587,7 +588,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 		rPlus = 0;
 	}
 	
-	private int interceptPlusMinus(int seconds, int playerHeight){
+	private int interceptPlusMinus(int playerHeight){
 		if(seconds%2 == 0 && playerHeight <= 150){
 			playerHeight = (int) (playerHeight + playerHeight*0.25);
 		}
@@ -600,7 +601,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 	
 	public void mouseEntered(MouseEvent arg0) { }
 	
-	private boolean isColorBall;
 	private boolean isColorPaddles;
 
 

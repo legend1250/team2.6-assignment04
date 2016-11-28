@@ -22,10 +22,6 @@ public class JDialogSettings extends JDialog{
 	 */
 	private static final long serialVersionUID = 6319977207462766493L;
 
-	private String namePlayer01, namePlayer02;
-	private Color BackgroundColor;
-	private Color PaddlesColor;
-
 	final static int WIDTH = 450, HEIGHT = 500;
 	
 	BallPanel ballPanel;
@@ -61,7 +57,9 @@ public class JDialogSettings extends JDialog{
 
 			
 		});
-		int h_paddlesPanel = 450;
+		//
+		this.add(paddlesPanel);
+		int h_paddlesPanel = 350;
 		paddlesPanel.setBounds(0, 0, WIDTH, h_paddlesPanel);
 		paddlesPanel.setVisible(false);
 		paddlesPanel.setBorder(new EtchedBorder());

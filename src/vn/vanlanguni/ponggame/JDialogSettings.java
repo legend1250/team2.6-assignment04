@@ -22,20 +22,26 @@ public class JDialogSettings extends JDialog{
 	 */
 	private static final long serialVersionUID = 6319977207462766493L;
 
+	private String namePlayer01, namePlayer02;
+	private Color BackgroundColor;
+	private Color PaddlesColor;
+
 	final static int WIDTH = 450, HEIGHT = 500;
 	
 	BallPanel ballPanel;
 	
-	public JDialogSettings(){
+	PaddlesPanel paddlesPanel = new PaddlesPanel();
+
+	public JDialogSettings() {
 		setTitle("Config infomation");
-		setPreferredSize(new Dimension(WIDTH,HEIGHT));
-		setLocation(380,150);
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setLocation(380, 150);
 		setLayout(null);
 		pack();
-		
+
 		initMenuComponent();
-		//add Panel
 		ballPanel = new BallPanel();
+		// add Panel
 		this.add(ballPanel);
 		int h_ballPanel = 350;
 		ballPanel.setBounds(0,0,WIDTH,h_ballPanel);
@@ -55,46 +61,63 @@ public class JDialogSettings extends JDialog{
 
 			
 		});
+		int h_paddlesPanel = 450;
+		paddlesPanel.setBounds(0, 0, WIDTH, h_paddlesPanel);
+		paddlesPanel.setVisible(false);
+		paddlesPanel.setBorder(new EtchedBorder());
 	}
-	
+
 	JMenuBar mnbMenuBar;
-	JMenu mnuUser, mnuBall, mnuBackground;
-	JMenuItem mniSetNameOfUser, mniSetColorOfBall;
-	private void initMenuComponent(){
-		//init menuComponent
+	JMenu mnuUser, mnuBall, mnuPaddles, mnuBackground;
+	JMenuItem mniSetNameOfUser, mniSetColorOfBall, mniSetColorOfPaddles;
+
+	private void initMenuComponent() {
+		// TODO Auto-generated method stub
+		// init menuComponent
 		mnbMenuBar = new JMenuBar();
 		mnuUser = new JMenu("User");
 		mnuBall = new JMenu("Ball");
+		mnuPaddles = new JMenu("Paddles");
 		mnuBackground = new JMenu("Background");
 		mniSetNameOfUser = new JMenuItem("Set name");
 		mniSetColorOfBall = new JMenuItem("Set color");
-		//add
+		mniSetColorOfPaddles = new JMenuItem("Set color");
+		// add
 		setJMenuBar(mnbMenuBar);
-		//add to menubar
+		// add to menubar
 		mnbMenuBar.add(mnuUser);
 		mnbMenuBar.add(mnuBall);
+		mnbMenuBar.add(mnuPaddles);
 		mnbMenuBar.add(mnuBackground);
-		//add to Menu
+		// add to Menu
 		mnuUser.add(mniSetNameOfUser);
-		
+		mnuPaddles.add(mniSetColorOfPaddles);
 		mnuBall.add(mniSetColorOfBall);
-		
+
 		ActionListener actionBall = new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource()== mniSetColorOfBall){
+				if (e.getSource() == mniSetColorOfBall) {
 					ballPanel.setVisible(true);
+					paddlesPanel.setVisible(false);
+				}
+				if (e.getSource() == mniSetColorOfPaddles) {
+					paddlesPanel.setVisible(true);
+					ballPanel.setVisible(false);
 				}
 			}
 		};
-		
-		//add ActionListener to JMenuItem
+		// add ActionListener to JMenuItem
+
 		mniSetColorOfBall.addActionListener(actionBall);
+		mniSetColorOfPaddles.addActionListener(actionBall);
+
 	}
-	
+
 	JButton btnSaveInfo = new JButton("Save"), btnExit = new JButton("Exit");
-	private void initComponents(){
+
+	private void initComponents() {
 		Insets isMargin = new Insets(1, 1, 1, 1);
 		add(btnSaveInfo);
 		btnSaveInfo.setFocusable(false);
@@ -106,7 +129,7 @@ public class JDialogSettings extends JDialog{
 		btnExit.setBounds(365, 400, 60, 30);
 		
 		ActionListener actionButton = new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JButton btnT = (JButton) e.getSource();
@@ -121,7 +144,7 @@ public class JDialogSettings extends JDialog{
 		};
 		btnSaveInfo.addActionListener(actionButton);
 		btnExit.addActionListener(actionButton);
-		
+
 	}
 	
 	private int nIndexImageBall = 0;
@@ -177,8 +200,35 @@ public class JDialogSettings extends JDialog{
 		BallColor = ballColor;
 	}
 
+	public PaddlesPanel returnPaddlesPanel() {
+		if (isColorPaddles()) {
+			paddlesPanel = new PaddlesPanel(true, getPaddlesColor());
+		}
+
+		return paddlesPanel;
+
+		// return paddlesPanel;
+	}
+
+
+	public boolean isColorPaddles() {
+		if (paddlesPanel.isIsColorPaddles()) {
+			return true;
+		}
+		return false;
+	}
+
+	public Color getPaddlesColor() {
+		return paddlesPanel.getColor();
+	}
+	
+	public int getImageBallIndex() {
+		return ballPanel.getnImageIndex();
+	}
 
 	public Color getBallColor() {
 		return BallColor;
 	}
+
+
 }

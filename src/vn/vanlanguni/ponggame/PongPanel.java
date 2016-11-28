@@ -37,17 +37,18 @@ import java.util.Random;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
 
 /**
  * 
  * @author Invisible Man
  *
  */
-public class PongPanel extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
+public class PongPanel extends JPanel implements ActionListener, KeyListener,
+		MouseMotionListener, MouseListener {
 	private static final long serialVersionUID = -1097341635155021546L;
 
 	private boolean showTitleScreen = true;
@@ -56,6 +57,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 
 	/** Background. */
 	private Color backgroundColor = Color.BLACK;
+	ImageIcon imgBackGround = new ImageIcon("images/Space.jpg");
 
 	/** State on the control keys. */
 	private boolean upPressed;
@@ -81,6 +83,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int playerTwoY = 250;
 	private int playerTwoWidth = 10;
 	private int playerTwoHeight = 60;
+	private Color paddlesColor = Color.RED;
 
 	/** Speed of the paddle - How fast the paddle move. */
 	private int paddleSpeed = 5;
@@ -89,15 +92,15 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int playerOneScore;
 	private int playerTwoScore;
 
-	
 	//
 	Rectangle rect;
-	int xRect =  130, yRect = 265, wRect = 200, hRect = 55;
+	int xRect = 130, yRect = 265, wRect = 200, hRect = 55;
 	Rectangle rectSettings;
-	int xSettings = 428, ySettings = yRect, wSettings = hRect, hSettings = hRect;
-	//ImageIcon imagePlayGame, imageSettings;
+	int xSettings = 428, ySettings = yRect, wSettings = hRect,
+			hSettings = hRect;
+	// ImageIcon imagePlayGame, imageSettings;
 	BufferedImage imagePlayGame, imageSettings;
-	
+
 	/** Construct a PongPanel. */
 	public PongPanel() {
 		setBackground(backgroundColor);
@@ -107,15 +110,15 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		addKeyListener(this);
 		addMouseMotionListener(this);
 		addMouseListener(this);
-		
-		//new rect
-		rect = new Rectangle(xRect,yRect,wRect,hRect);
-		rectSettings = new Rectangle(xSettings,ySettings,wSettings,hSettings);
+
+		// new rect
+		rect = new Rectangle(xRect, yRect, wRect, hRect);
+		rectSettings = new Rectangle(xSettings, ySettings, wSettings, hSettings);
 
 		try {
 			imagePlayGame = ImageIO.read(new File("images/btn_playgame.png"));
 			imageSettings = ImageIO.read(new File("images/setting.png"));
-			//Ball Image
+			// Ball Image
 			imgSoccerBall = ImageIO.read(new File(imgURL[0]));
 			imgKABall = ImageIO.read(new File(imgURL[1]));
 			imgMasterBall = ImageIO.read(new File(imgURL[2]));
@@ -125,7 +128,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
-		
+
 		// call step() 60 fps
 		Timer timer = new Timer(1000 / 60, this);
 		timer.start();
@@ -152,7 +155,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				playerOneY -= paddleSpeed;
 			}
 			// Move down if after moving paddle is not outside the screen
-			if (downPressed && playerOneY + playerOneHeight + paddleSpeed < getHeight()) {
+			if (downPressed
+					&& playerOneY + playerOneHeight + paddleSpeed < getHeight()) {
 				playerOneY += paddleSpeed;
 			}
 
@@ -162,7 +166,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				playerTwoY -= paddleSpeed;
 			}
 			// Move down if after moving paddle is not outside the screen
-			if (sPressed && playerTwoY + playerTwoHeight + paddleSpeed < getHeight()) {
+			if (sPressed
+					&& playerTwoY + playerTwoHeight + paddleSpeed < getHeight()) {
 				playerTwoY += paddleSpeed;
 			}
 
@@ -195,7 +200,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			// will the ball go off the left side?
 			if (nextBallLeft < playerOneRight) {
 				// is it going to miss the paddle?
-				if (nextBallTop > playerOneBottom || nextBallBottom < playerOneTop) {
+				if (nextBallTop > playerOneBottom
+						|| nextBallBottom < playerOneTop) {
 
 					playerTwoScore++;
 					
@@ -216,7 +222,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					playerTwoHeight = 60;
 				} else {
 					// If the ball hitting the paddle, it will bounce back
-					
+
 					ballDeltaX *= -1;
 					
 					//player is playing with ball
@@ -227,7 +233,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			// will the ball go off the right side?
 			if (nextBallRight > playerTwoLeft) {
 				// is it going to miss the paddle?
-				if (nextBallTop > playerTwoBottom || nextBallBottom < playerTwoTop) {
+				if (nextBallTop > playerTwoBottom
+						|| nextBallBottom < playerTwoTop) {
 
 					playerOneScore++;
 
@@ -248,7 +255,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					playerTwoHeight = 60;
 				} else {
 					// If the ball hitting the paddle, it will bounce back
-					
+
 					ballDeltaX *= -1;
 					
 					//player is playing with ball
@@ -286,7 +293,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	/** Paint the game screen. */
 	boolean hoverPlayGame;
 	boolean hoverSettings;
-	
+
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
@@ -294,19 +301,18 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		if (showTitleScreen) {
 
 			/* Show welcome screen */
+			g.drawImage(imgBackGround.getImage(), 0,0,500,500, null);
 
 			// Draw game title and start message
 			g.setColor(Color.GREEN);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
 			g.drawString("Pong Game", 130, 100);
 
-			
-			if(hoverPlayGame){
+			if (hoverPlayGame) {
 				g.setColor(Color.WHITE);
 				g.fillRect(xRect, yRect, wRect, hRect);
 				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect + hRect, 0, 0, 522, 186, null);
-			}
-			else{
+			} else {
 				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect + hRect, 0, 0, 522, 186, null);
 			}
 			if(hoverSettings){
@@ -318,7 +324,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			
 			//reset score each player
 			playerOneScore = playerTwoScore = 0;
-			
 		} else if (playing) {
 
 			/* Game is playing */
@@ -359,8 +364,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				g.drawImage(imgMasterBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 400, 400, null);
 			}
 			// draw the paddles
-			g.setColor(Color.RED);
+			g.setColor(paddlesColor);
 			g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
+			g.setColor(paddlesColor);
 			g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 			
 			if(ShowingPlus){
@@ -393,15 +399,13 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			g.setColor(Color.YELLOW);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 18));
 			g.drawString("Press 'Space' to restart the game", 150, 250);
-			
 		}
 	}
 
 	public void keyTyped(KeyEvent e) {
-	
+
 	}
 
-	
 	public void keyPressed(KeyEvent e) {
 		if (showTitleScreen) {
 			if (e.getKeyChar() == 'p') {
@@ -438,25 +442,29 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		} else if (e.getKeyCode() == KeyEvent.VK_S) {
 			sPressed = false;
 		}
-		
+
 	}
-	
+
+
+	public void setPaddlesColor(Color newColor1) {
+		this.paddlesColor = newColor1;
+	}
+
+	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		//System.out.println(String.format("%d %d",arg0.getX(), arg0.getY()));
-		if(showTitleScreen){
-			//rectangle playgame
-			if(rect.contains(arg0.getX(), arg0.getY())){
+		// System.out.println(String.format("%d %d",arg0.getX(), arg0.getY()));
+		if (showTitleScreen) {
+			// rectangle playgame
+			if (rect.contains(arg0.getX(), arg0.getY())) {
 				hoverPlayGame = true;
-			}
-			else{
+			} else {
 				hoverPlayGame = false;
 			}
-			
-			//rectangle settings
-			if(rectSettings.contains(arg0.getX(),arg0.getY())){
+
+			// rectangle settings
+			if (rectSettings.contains(arg0.getX(), arg0.getY())) {
 				hoverSettings = true;
-			}
-			else{
+			} else {
 				hoverSettings = false;
 			}
 		}
@@ -464,17 +472,21 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	
 	JDialogSettings settings = new JDialogSettings();
 	JDialogSettings ballSettings;
+	BallPanel ball;
 	
+	PaddlesPanel paddles;
+
 	public void mouseClicked(MouseEvent arg0) {
-		
-		if(showTitleScreen){
-			if(hoverPlayGame){
+
+		if (showTitleScreen) {
+			if (hoverPlayGame) {
 				showTitleScreen = false;
 				playing = true;
 				createPlusPoint();
 			}
-			if(hoverSettings){
 				
+			if (hoverSettings) {
+				settings = new JDialogSettings();
 				settings.setModal(true);
 				settings.setVisible(true);
 				
@@ -486,10 +498,20 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				else{
 					nImageBallIndex = ballSettings.getnIndexImageBall();
 				}
+				
+				paddles = settings.returnPaddlesPanel();
+				if (paddles.isIsColorPaddles()) {
+					setPaddlesColor(paddles.getColor());
+					isColorPaddles = true;
+				} else {
+					isColorPaddles = false;
+				}
+
+
 				settings.dispose();
 			}
 		}
-		
+
 	}
 
 	private int nImageBallIndex = 0;
@@ -577,14 +599,21 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	}
 	
 	public void mouseEntered(MouseEvent arg0) { }
-
-	public void mouseExited(MouseEvent arg0) { }
-
-	public void mousePressed(MouseEvent arg0) { }
-
-	public void mouseReleased(MouseEvent arg0) { }
-
-	public void mouseDragged(MouseEvent arg0) { }
-
 	
+	private boolean isColorBall;
+	private boolean isColorPaddles;
+
+
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	public void mousePressed(MouseEvent arg0) {
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+	}
+
+	public void mouseDragged(MouseEvent arg0) {
+	}
+
 }

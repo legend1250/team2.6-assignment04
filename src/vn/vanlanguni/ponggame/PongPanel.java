@@ -211,6 +211,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					playerPlayingBall = 0; //there is no player is playing
 					//FIXME ask teacher for help
 					createPlusPoint();
+					//reset Height of Paddle's player
+					playerOneHeight = 60;
+					playerTwoHeight = 60;
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
@@ -240,6 +243,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					playerPlayingBall = 0; //there is no player is playing
 					//FIXME ask teacher for help
 					createPlusPoint();
+					//reset Height of Paddle's player
+					playerOneHeight = 60;
+					playerTwoHeight = 60;
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					
@@ -257,6 +263,12 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			if(ShowingPlus){
 				if(playerPlayingBall != 0 && isInterception()){
 					ShowingPlus = false;
+					if(playerPlayingBall == 1){
+						playerOneHeight = interceptPlusMinus(seconds, playerOneHeight);
+					}
+					else if(playerPlayingBall == 2){
+						playerTwoHeight = interceptPlusMinus(seconds, playerTwoHeight);
+					}
 					createPlusPoint();
 				}
 				
@@ -515,9 +527,12 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			System.out.println(new Date());
 			tmInitPlus.schedule(new TimerTask() {
 				public void run() {
-					int n = 400;
-					xPlus = rd.nextInt(n)+1;
-					yPlus = rd.nextInt(n)+1;
+					int n = getHeight()-50;
+					do{
+						xPlus = rd.nextInt(n)+1;
+						yPlus = rd.nextInt(n)+1;
+					}
+					while ( xPlus < 50 || yPlus < 50);
 					do {
 						rPlus = rd.nextInt(40)+1;
 					}
@@ -548,6 +563,17 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		xPlus = 0;
 		yPlus = 0;
 		rPlus = 0;
+	}
+	
+	private int interceptPlusMinus(int seconds, int playerHeight){
+		if(seconds%2 == 0 && playerHeight <= 150){
+			playerHeight = (int) (playerHeight + playerHeight*0.25);
+		}
+		else if(seconds%2 == 1 && playerHeight >= 10){
+			playerHeight = (int) (playerHeight - playerHeight*0.25);
+		}
+		
+		return playerHeight;
 	}
 	
 	public void mouseEntered(MouseEvent arg0) { }

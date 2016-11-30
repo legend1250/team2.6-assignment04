@@ -296,8 +296,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		ImageIcon imgPlayBackground = new ImageIcon("images/background2.jpg");
-		g.drawImage(imgPlayBackground.getImage(), 0, 0, 500, 500, null);
+		
 		if (showTitleScreen) {
 
 			/* Show welcome screen */
@@ -324,9 +323,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			}
 
 		} else if (playing) {
-
+			
 			/* Game is playing */
-
+			ImageIcon imgPlayBackground = new ImageIcon("images/background2.jpg");
+			g.drawImage(imgPlayBackground.getImage(), 0, 0, 500, 500, null);
 			// set the coordinate limit
 			int playerOneRight = playerOneX + playerOneWidth;
 			int playerTwoLeft = playerTwoX;

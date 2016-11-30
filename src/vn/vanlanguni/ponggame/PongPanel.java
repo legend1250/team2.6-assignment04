@@ -47,8 +47,7 @@ import javax.swing.Timer;
  * @author Invisible Man
  *
  */
-public class PongPanel extends JPanel implements ActionListener, KeyListener,
-		MouseMotionListener, MouseListener {
+public class PongPanel extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
 	private static final long serialVersionUID = -1097341635155021546L;
 
 	private boolean showTitleScreen = true;
@@ -92,12 +91,13 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 	private int playerOneScore;
 	private int playerTwoScore;
 
+	String NameP1="", NameP2="";
+
 	//
 	Rectangle rect;
 	int xRect = 130, yRect = 265, wRect = 200, hRect = 55;
 	Rectangle rectSettings;
-	int xSettings = 428, ySettings = yRect, wSettings = hRect,
-			hSettings = hRect;
+	int xSettings = 428, ySettings = yRect, wSettings = hRect, hSettings = hRect;
 	// ImageIcon imagePlayGame, imageSettings;
 	BufferedImage imagePlayGame, imageSettings;
 
@@ -157,8 +157,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 				playerOneY -= paddleSpeed;
 			}
 			// Move down if after moving paddle is not outside the screen
-			if (downPressed
-					&& playerOneY + playerOneHeight + paddleSpeed < getHeight()) {
+			if (downPressed && playerOneY + playerOneHeight + paddleSpeed < getHeight()) {
 				playerOneY += paddleSpeed;
 			}
 
@@ -168,8 +167,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 				playerTwoY -= paddleSpeed;
 			}
 			// Move down if after moving paddle is not outside the screen
-			if (sPressed
-					&& playerTwoY + playerTwoHeight + paddleSpeed < getHeight()) {
+			if (sPressed && playerTwoY + playerTwoHeight + paddleSpeed < getHeight()) {
 				playerTwoY += paddleSpeed;
 			}
 
@@ -203,8 +201,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 			// will the ball go off the left side?
 			if (nextBallLeft < playerOneRight) {
 				// is it going to miss the paddle?
-				if (nextBallTop > playerOneBottom
-						|| nextBallBottom < playerOneTop) {
+				if (nextBallTop > playerOneBottom || nextBallBottom < playerOneTop) {
 
 					playerTwoScore++;
 
@@ -237,20 +234,18 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 			// will the ball go off the right side?
 			if (nextBallRight > playerTwoLeft) {
 				// is it going to miss the paddle?
-				if (nextBallTop > playerTwoBottom
-						|| nextBallBottom < playerTwoTop) {
+				if (nextBallTop > playerTwoBottom || nextBallBottom < playerTwoTop) {
 
 					playerOneScore++;
 
 					// Player 1 Win, restart the game
-					if (playerOneScore == 3) {	
+					if (playerOneScore == 3) {
 						Sound.play("sound/win.wav");
 						playing = false;
 						gameOver = true;
 					}
 					ballX = 200;
 					ballY = 200;
-					
 
 					// player is playing with ball
 					playerPlayingBall = 0; // there is no player is playing
@@ -301,8 +296,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		ImageIcon imgPlayBackground = new ImageIcon("images/background2.jpg"); 
-		g.drawImage(imgPlayBackground.getImage(),0 ,0, 500, 500, null);
+		ImageIcon imgPlayBackground = new ImageIcon("images/background2.jpg");
+		g.drawImage(imgPlayBackground.getImage(), 0, 0, 500, 500, null);
 		if (showTitleScreen) {
 
 			/* Show welcome screen */
@@ -316,20 +311,16 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 			if (hoverPlayGame) {
 				g.setColor(Color.WHITE);
 				g.fillRect(xRect, yRect, wRect, hRect);
-				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect
-						+ hRect, 0, 0, 522, 186, null);
+				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect + hRect, 0, 0, 522, 186, null);
 			} else {
-				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect
-						+ hRect, 0, 0, 522, 186, null);
+				g.drawImage(imagePlayGame, xRect, yRect, xRect + wRect, yRect + hRect, 0, 0, 522, 186, null);
 			}
 			if (hoverSettings) {
-				g.drawImage(imageSettings, xSettings, ySettings, xSettings
-						+ wSettings, ySettings + hSettings, 0, 0, 300, 300,
-						null);
+				g.drawImage(imageSettings, xSettings, ySettings, xSettings + wSettings, ySettings + hSettings, 0, 0,
+						300, 300, null);
 			} else {
-				g.drawImage(imageSettings, xSettings, ySettings, xSettings
-						+ wSettings, ySettings + hSettings, 0, 0, 300, 300,
-						null);
+				g.drawImage(imageSettings, xSettings, ySettings, xSettings + wSettings, ySettings + hSettings, 0, 0,
+						300, 300, null);
 			}
 
 		} else if (playing) {
@@ -357,19 +348,20 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 			g.drawString(String.valueOf(playerTwoScore), 400, 100); // Player 2
 																	// score
 
+			// draw Player's Name
+			g.drawString(NameP1, 50, 150);
+			g.drawString(NameP2, 350, 150);
+
 			// draw the ball
 			if (nImageBallIndex == 0) {
 				g.setColor(ballColor);
 				g.fillOval(ballX, ballY, diameter, diameter);
 			} else if (nImageBallIndex == 1) {
-				g.drawImage(imgSoccerBall, ballX, ballY, ballX + diameter,
-						ballY + diameter, 0, 0, 256, 256, null);
+				g.drawImage(imgSoccerBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 256, 256, null);
 			} else if (nImageBallIndex == 2) {
-				g.drawImage(imgKABall, ballX, ballY, ballX + diameter, ballY
-						+ diameter, 0, 0, 333, 328, null);
+				g.drawImage(imgKABall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 333, 328, null);
 			} else if (nImageBallIndex == 3) {
-				g.drawImage(imgMasterBall, ballX, ballY, ballX + diameter,
-						ballY + diameter, 0, 0, 400, 400, null);
+				g.drawImage(imgMasterBall, ballX, ballY, ballX + diameter, ballY + diameter, 0, 0, 400, 400, null);
 			}
 			// draw the paddles
 			g.setColor(paddlesColor);
@@ -379,11 +371,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 
 			if (ShowingPlus) {
 				if (seconds % 2 == 0) {
-					g.drawImage(imagePlus, xPlus, yPlus, xPlus + rPlus, yPlus
-							+ rPlus, 0, 0, 256, 256, null); // Plus
+					g.drawImage(imagePlus, xPlus, yPlus, xPlus + rPlus, yPlus + rPlus, 0, 0, 256, 256, null); // Plus
 				} else {
-					g.drawImage(imageMinus, xPlus, yPlus, xPlus + rPlus, yPlus
-							+ rPlus, 0, 0, 256, 256, null); // Minus
+					g.drawImage(imageMinus, xPlus, yPlus, xPlus + rPlus, yPlus + rPlus, 0, 0, 256, 256, null); // Minus
 				}
 			}
 		} else if (gameOver) {
@@ -513,7 +503,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 				} else {
 					isColorPaddles = false;
 				}
-
+				SetName(settings.getNamePlayer01(), settings.getNamePlayer02());
 				settings.dispose();
 			}
 		}
@@ -524,8 +514,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 	private Color ballColor = Color.RED;
 
 	BufferedImage imgBallPlaying, imgSoccerBall, imgKABall, imgMasterBall;
-	String[] imgURL = { "images/SoccerBall.png", "images/KA_Ball.png",
-			"images/MasterBall.png" };
+	String[] imgURL = { "images/SoccerBall.png", "images/KA_Ball.png", "images/MasterBall.png" };
 
 	private void setBallColor(Color ballColor) {
 		this.ballColor = ballColor;
@@ -558,19 +547,18 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener,
 					do {
 						rPlus = rd.nextInt(40) + 1;
 					} while (rPlus < 20);
-					System.out.println((xPlus + rPlus / 2)
-							+ "-"
-							+ (yPlus + rPlus / 2)
-							+ "\tR: "
-							+ rPlus
-							+ " \t"
-							+ new SimpleDateFormat("HH:mm:ss")
-									.format(new Date()));
+					System.out.println((xPlus + rPlus / 2) + "-" + (yPlus + rPlus / 2) + "\tR: " + rPlus + " \t"
+							+ new SimpleDateFormat("HH:mm:ss").format(new Date()));
 					ShowingPlus = true;
 				}
 			}, seconds * 1000);
 		}
 
+	}
+
+	public void SetName(String p1, String p2) {
+		NameP1 = p1;
+		NameP2 = p2;
 	}
 
 	private boolean isInterception() {

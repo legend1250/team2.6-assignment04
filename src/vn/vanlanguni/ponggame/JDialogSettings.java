@@ -16,16 +16,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 
-public class JDialogSettings extends JDialog{
+public class JDialogSettings extends JDialog {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6319977207462766493L;
 
 	final static int WIDTH = 450, HEIGHT = 500;
-	
+
 	BallPanel ballPanel;
-	
+	private String namePlayer01 = "", namePlayer02 = "";
+
+	NamePanel namePanel = new NamePanel();
 	PaddlesPanel paddlesPanel = new PaddlesPanel();
 
 	public JDialogSettings() {
@@ -40,12 +42,17 @@ public class JDialogSettings extends JDialog{
 		// add Panel
 		this.add(ballPanel);
 		int h_ballPanel = 350;
-		ballPanel.setBounds(0,0,WIDTH,h_ballPanel);
+		ballPanel.setBounds(0, 0, WIDTH, h_ballPanel);
 		ballPanel.setVisible(false);
 		ballPanel.setBorder(new EtchedBorder());
-		
-		initComponents();		
-		
+
+		this.add(namePanel);
+		namePanel.setLayout(null);
+		namePanel.setBounds(0, 0, 380, 150);
+		namePanel.setVisible(true);
+		namePanel.setBorder(new EtchedBorder());
+		initComponents();
+
 		addWindowListener(new WindowAdapter() {
 
 			@Override
@@ -55,7 +62,6 @@ public class JDialogSettings extends JDialog{
 				AskingCloseJDialog();
 			}
 
-			
 		});
 		//
 		this.add(paddlesPanel);
@@ -99,10 +105,18 @@ public class JDialogSettings extends JDialog{
 				if (e.getSource() == mniSetColorOfBall) {
 					ballPanel.setVisible(true);
 					paddlesPanel.setVisible(false);
+					namePanel.setVisible(false);
 				}
 				if (e.getSource() == mniSetColorOfPaddles) {
 					paddlesPanel.setVisible(true);
 					ballPanel.setVisible(false);
+					namePanel.setVisible(false);
+
+				}
+				if (e.getSource() == mniSetNameOfUser){
+					ballPanel.setVisible(false);
+					namePanel.setVisible(true);
+					paddlesPanel.setVisible(false);
 				}
 			}
 		};
@@ -110,6 +124,7 @@ public class JDialogSettings extends JDialog{
 
 		mniSetColorOfBall.addActionListener(actionBall);
 		mniSetColorOfPaddles.addActionListener(actionBall);
+		mniSetNameOfUser.addActionListener(actionBall);
 
 	}
 
@@ -125,16 +140,16 @@ public class JDialogSettings extends JDialog{
 		btnExit.setFocusable(false);
 		btnExit.setMargin(isMargin);
 		btnExit.setBounds(365, 400, 60, 30);
-		
+
 		ActionListener actionButton = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JButton btnT = (JButton) e.getSource();
-				if(btnT.equals(btnSaveInfo)){
+				if (btnT.equals(btnSaveInfo)) {
 					saveInfobBallPanel();
-				}
-				else if(btnT.equals(btnExit)){
+					saveNamePlayer();
+				} else if (btnT.equals(btnExit)) {
 					AskingCloseJDialog();
 					dispose();
 				}
@@ -144,52 +159,79 @@ public class JDialogSettings extends JDialog{
 		btnExit.addActionListener(actionButton);
 
 	}
-	
+
 	private int nIndexImageBall = 0;
 	private Color BallColor = Color.RED;
-	
+
 	JDialogSettings settingsBall;
-	
-	public JDialogSettings(int nIndex, Color newColor){
+
+	public JDialogSettings(int nIndex, Color newColor) {
 		this.nIndexImageBall = nIndex;
 		this.BallColor = newColor;
 	}
-	
-	
-	private void saveInfobBallPanel(){
+
+	private void saveInfobBallPanel() {
 		int nIndex = ballPanel.getnImageIndex();
 		Color newColor = ballPanel.getColor();
 		setnIndexImageBall(nIndex);
 		setBallColor(newColor);
-		settingsBall = new JDialogSettings(nIndex,newColor);
+		settingsBall = new JDialogSettings(nIndex, newColor);
 	}
 
-	public JDialogSettings getSettingsBall(){
+	private void saveNamePlayer() {
+		if (namePanel.GetNamePlayer01().isEmpty()) {
+			setNamePlayer01("");
+		} else {
+			setNamePlayer01(namePanel.GetNamePlayer01());
+		}
+		if (namePanel.GetNamePlayer02().isEmpty()) {
+			setNamePlayer02("");
+		} else {
+			setNamePlayer02(namePanel.GetNamePlayer02());
+		}
+	}
+
+	public String getNamePlayer01() {
+		return namePlayer01;
+	}
+
+	public void setNamePlayer01(String namePlayer01) {
+		this.namePlayer01 = namePlayer01;
+	}
+
+	public String getNamePlayer02() {
+		return namePlayer02;
+	}
+
+	public void setNamePlayer02(String namePlayer02) {
+		this.namePlayer02 = namePlayer02;
+	}
+
+	public JDialogSettings getSettingsBall() {
 		return settingsBall;
 	}
-	
-	private void AskingCloseJDialog(){
-		if(getBallColor() != ballPanel.getColor() || getnIndexImageBall() != ballPanel.getnImageIndex()){
-			int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?","WARNING",
-			        JOptionPane.YES_NO_OPTION);
-			if(result == JOptionPane.YES_OPTION){
+
+	private void AskingCloseJDialog() {
+		if (getBallColor() != ballPanel.getColor() || getnIndexImageBall() != ballPanel.getnImageIndex()) {
+			int result = JOptionPane.showConfirmDialog(null, "You haven't save yet! Do you want to save then Exit?",
+					"WARNING", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
 				saveInfobBallPanel();
-			}
-			else if(result == JOptionPane.NO_OPTION){
-				settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
+				saveNamePlayer();
+			} else if (result == JOptionPane.NO_OPTION) {
+				settingsBall = new JDialogSettings(getnIndexImageBall(), getBallColor());
 				dispose();
 			}
-		}
-		else{
-			settingsBall = new JDialogSettings(getnIndexImageBall(),getBallColor());
+		} else {
+			settingsBall = new JDialogSettings(getnIndexImageBall(), getBallColor());
 			dispose();
 		}
 	}
-	
+
 	public void setnIndexImageBall(int nIndexImageBall) {
 		this.nIndexImageBall = nIndexImageBall;
 	}
-	
+
 	public int getnIndexImageBall() {
 		return nIndexImageBall;
 	}
@@ -208,7 +250,6 @@ public class JDialogSettings extends JDialog{
 		// return paddlesPanel;
 	}
 
-
 	public boolean isColorPaddles() {
 		if (paddlesPanel.isIsColorPaddles()) {
 			return true;
@@ -219,7 +260,7 @@ public class JDialogSettings extends JDialog{
 	public Color getPaddlesColor() {
 		return paddlesPanel.getColor();
 	}
-	
+
 	public int getImageBallIndex() {
 		return ballPanel.getnImageIndex();
 	}
@@ -227,6 +268,5 @@ public class JDialogSettings extends JDialog{
 	public Color getBallColor() {
 		return BallColor;
 	}
-
 
 }

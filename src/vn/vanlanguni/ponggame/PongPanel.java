@@ -528,16 +528,20 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	// ImagePlusMinus
 	BufferedImage imagePlus, imageMinus;
 	Random rd = new Random();
-
+	TimerTask a=null;
 	private void createPlusPoint() {
 		if (playing) {
 			resetPlus();
 			do {
-				seconds = rd.nextInt(15) + 1;
+				seconds = 6;
 			} while (seconds < 5);
 			System.out.println(seconds);
 			System.out.println(new Date());
-			tmInitPlus.schedule(new TimerTask() {
+			if( a!= null){
+				a.cancel();
+			}
+			a= new TimerTask() {
+			//	tmInitPlus.schedule(new TimerTask() {
 				public void run() {
 					int n = getHeight() - 50;
 					do {
@@ -551,7 +555,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 							+ new SimpleDateFormat("HH:mm:ss").format(new Date()));
 					ShowingPlus = true;
 				}
-			}, seconds * 1000);
+			};
+			tmInitPlus.schedule( a, seconds * 1000);
 		}
 
 	}

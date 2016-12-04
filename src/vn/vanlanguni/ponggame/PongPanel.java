@@ -533,7 +533,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		if (playing) {
 			resetPlus();
 			do {
-				seconds = 6;
+				seconds = rd.nextInt(15)+1;
 			} while (seconds < 5);
 			System.out.println(seconds);
 			System.out.println(new Date());
